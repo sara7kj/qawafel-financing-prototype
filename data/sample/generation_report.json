@@ -1,0 +1,100 @@
+{
+  "seed": 20260930,
+  "note": "Generator self-check of the clean sample; not the analysis engine.",
+  "record_counts": {
+    "customers": 25,
+    "invoices": 605,
+    "payments": 686,
+    "credit_notes": 20
+  },
+  "invoice_settlement_at_vd": {
+    "fully_settled": 493,
+    "partly_settled": 15,
+    "unpaid": 97
+  },
+  "open_balance_at_vd_sar": 1577900.74,
+  "after_vd_records": {
+    "payments": 29,
+    "credit_notes": 0
+  },
+  "monthly_invoice_counts": {
+    "2025-10": 54,
+    "2025-11": 43,
+    "2025-12": 47,
+    "2026-01": 63,
+    "2026-02": 63,
+    "2026-03": 61,
+    "2026-04": 54,
+    "2026-05": 50,
+    "2026-06": 46,
+    "2026-07": 41,
+    "2026-08": 32,
+    "2026-09": 51
+  },
+  "profile_vs_targets": {
+    "gross_sales_sar": {
+      "actual": 7597838.04,
+      "target": [
+        6500000,
+        8500000
+      ],
+      "within_target": true
+    },
+    "invoice_count": {
+      "actual": 605,
+      "target": [
+        550,
+        650
+      ],
+      "within_target": true
+    },
+    "top1_net_sales_share": {
+      "actual": 0.2049,
+      "target": [
+        0.15,
+        0.22
+      ],
+      "within_target": true
+    },
+    "top5_net_sales_share": {
+      "actual": 0.6454,
+      "target": [
+        0.5,
+        0.66
+      ],
+      "within_target": true
+    },
+    "credit_note_ratio": {
+      "actual": 0.0065,
+      "target": [
+        0.005,
+        0.01
+      ],
+      "within_target": true
+    },
+    "open_balance_months_of_sales": {
+      "actual": 2.17,
+      "target": [
+        1.5,
+        2.5
+      ],
+      "within_target": true
+    },
+    "over_90_share_of_open_balance": {
+      "actual": 0.0576,
+      "target": [
+        0.03,
+        0.1
+      ],
+      "within_target": true
+    },
+    "empty_months": {
+      "actual": 0,
+      "target": [
+        0,
+        0
+      ],
+      "within_target": true
+    }
+  }
+}

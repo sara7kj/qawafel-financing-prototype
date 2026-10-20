@@ -1,0 +1,48 @@
+{
+  "_source": "Hand-computed in docs/data-design.md §6 and independently reviewed. Not produced by code.",
+  "_conventions": "Amounts are SAR decimal strings. Months not listed under 'monthly' are 0.00. Ratios are exact fractions plus 4-decimal ROUND_HALF_UP display values.",
+  "file": "worked_example.xlsx",
+  "valuation_date": "2026-09-30",
+  "reporting_period": ["2025-10-01", "2026-09-30"],
+  "gross_sales": {
+    "monthly": {"2026-05": "3000.00", "2026-06": "10000.00", "2026-08": "10000.00", "2026-09": "2000.33"},
+    "total": "25000.33"
+  },
+  "credit_notes": {"monthly": {"2026-08": "400.00"}, "total": "400.00"},
+  "net_sales": {
+    "monthly": {"2026-05": "3000.00", "2026-06": "10000.00", "2026-08": "9600.00", "2026-09": "2000.33"},
+    "total": "24600.33"
+  },
+  "credit_note_ratio": {"fraction": "400.00/25000.33", "display": "0.0160"},
+  "collections_from_accepted_records_only": {
+    "monthly": {"2026-07": "5000.00", "2026-08": "3000.00", "2026-09": "4000.00"},
+    "total": "12000.00"
+  },
+  "open_balances": {
+    "W1": {"open": "3500.00", "days_overdue": 77, "bucket": "61-90"},
+    "W2": {"open": "140.00", "days_overdue": 30, "bucket": "1-30"},
+    "W3": {"open": "6900.00", "days_overdue": 0, "bucket": "current"},
+    "W4": {"open": "2300.38", "days_overdue": -40, "bucket": "current"},
+    "W5": {"open": "3450.00", "days_overdue": 113, "bucket": "90+"}
+  },
+  "aging": {"current": "9200.38", "1-30": "140.00", "31-60": "0.00", "61-90": "3500.00", "90+": "3450.00", "total": "16290.38"},
+  "eligible_receivables": "12840.38",
+  "financing_estimate_at_70pct": "8988.27",
+  "sales_concentration": {
+    "CUST-A": {"amount": "16600.00", "fraction": "16600.00/24600.33", "display": "0.6748"},
+    "CUST-B": {"amount": "8000.33", "fraction": "8000.33/24600.33", "display": "0.3252"}
+  },
+  "receivables_concentration": {
+    "CUST-A": {"amount": "7090.00", "fraction": "7090.00/16290.38", "display": "0.4352"},
+    "CUST-B": {"amount": "9200.38", "fraction": "9200.38/16290.38", "display": "0.5648"}
+  },
+  "warnings": {
+    "R-19_empty_months": ["2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-07"],
+    "R-20": ["sales:CUST-A", "sales:CUST-B", "receivables:CUST-A", "receivables:CUST-B"],
+    "R-21": true
+  },
+  "receivables_quality_status": "no_known_issues",
+  "source_completeness_verified": false,
+  "quarantined": [],
+  "out_of_period": [{"record": "payments:P4", "rule": "R-15", "amount": "6900.00"}]
+}

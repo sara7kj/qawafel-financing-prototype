@@ -1,0 +1,53 @@
+{
+  "_source": "Hand-written from docs/data-design.md §5.0-§5.1. Not produced by code.",
+  "_conventions": "Differences are relative to data/sample/sample_clean.xlsx analysed with the same rules. Amounts are SAR decimal strings.",
+  "file": "../../data/sample/sample_defects.xlsx",
+  "all_series_and_totals_available": true,
+  "financing_estimate_available": true,
+  "receivables_quality_status": "invoices_excluded",
+  "receivables_quality_reasons": ["R-03", "R-04", "R-05", "R-06", "R-07", "R-13", "R-16"],
+  "receivable_unreliable_invoices_added": ["INV-D11"],
+  "quarantined_added": {
+    "customers": [
+      {"record": "<missing id> 'Missing ID Store'", "rule": "R-01"},
+      {"record": "CUST-D21 'Duplicate Store A'", "rule": "R-02"},
+      {"record": "CUST-D21 'Duplicate Store B'", "rule": "R-02"}
+    ],
+    "invoices": [
+      {"record": "INV-D01", "rule": "R-04"},
+      {"record": "INV-D02", "rule": "R-04"},
+      {"record": "<missing id>", "rule": "R-03"},
+      {"record": "INV-D03 (1150.00)", "rule": "R-03"},
+      {"record": "INV-D03 (2300.00)", "rule": "R-03"},
+      {"record": "INV-D04", "rule": "R-05"},
+      {"record": "INV-D05", "rule": "R-05"},
+      {"record": "INV-D06", "rule": "R-06"},
+      {"record": "INV-D07", "rule": "R-07"},
+      {"record": "INV-D08", "rule": "R-16"}
+    ],
+    "payments": [],
+    "credit_notes": []
+  },
+  "excluded_amounts_added": {
+    "invoices": {"known_recorded_amount_excluded": "6900.02", "unreadable_or_not_positive": 1, "duplicate_id": 2, "non_sar": 1, "unknown_currency": 0}
+  },
+  "d13_excluded_payments_added": {"count": 1, "known_recorded_amount": "0.00", "unknown_currency": 1, "records": ["PAY-D03"], "dependent_on": "INV-D03", "dependency_rules": ["R-03"]},
+  "revision_note": "d13 known amount changed from 1150.00 to 0.00 (unknown_currency 1) after the approved currency rule: PAY-D03 links to the duplicated ID INV-D03, an ambiguous link, so SAR is not assumed.",
+  "out_of_period_added": [
+    {"record": "invoices:INV-D10", "rule": "R-14", "amount": "1150.00"},
+    {"record": "payments:PAY-D10", "rule": "R-14 (dependent of out-of-period invoice)", "amount": "1150.00"}
+  ],
+  "accepted_added": ["INV-D09", "INV-D11", "INV-D12", "PAY-D11A", "PAY-D11B", "PAY-D12", "CUST-D20", "CUST-D22"],
+  "differences_vs_clean": {
+    "gross_sales": {"2026-06": "3000.00", "total": "3000.00"},
+    "net_sales": {"2026-06": "3000.00", "total": "3000.00"},
+    "credit_notes": {"total": "0.00"},
+    "collections_from_accepted_records_only": {"2026-06": "2400.00", "total": "2400.00"},
+    "open_balance": {"61-90": "1150.01", "total": "1150.01"},
+    "eligible_receivables": "1150.01"
+  },
+  "warnings_added": {
+    "R-17": ["payments:PAY-D12"],
+    "R-18": ["customers:CUST-007", "customers:CUST-D22"]
+  }
+}
