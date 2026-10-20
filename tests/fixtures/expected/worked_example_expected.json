@@ -1,6 +1,7 @@
 {
   "_source": "Hand-computed in docs/data-design.md §6 and independently reviewed. Not produced by code.",
   "_conventions": "Amounts are SAR decimal strings. Months not listed under 'monthly' are 0.00. Ratios are exact fractions plus 4-decimal ROUND_HALF_UP display values.",
+  "_revision_note": "The last aging bucket was renamed from '90+' to '>90' (label only). No values changed.",
   "file": "worked_example.xlsx",
   "valuation_date": "2026-09-30",
   "reporting_period": ["2025-10-01", "2026-09-30"],
@@ -23,9 +24,9 @@
     "W2": {"open": "140.00", "days_overdue": 30, "bucket": "1-30"},
     "W3": {"open": "6900.00", "days_overdue": 0, "bucket": "current"},
     "W4": {"open": "2300.38", "days_overdue": -40, "bucket": "current"},
-    "W5": {"open": "3450.00", "days_overdue": 113, "bucket": "90+"}
+    "W5": {"open": "3450.00", "days_overdue": 113, "bucket": ">90"}
   },
-  "aging": {"current": "9200.38", "1-30": "140.00", "31-60": "0.00", "61-90": "3500.00", "90+": "3450.00", "total": "16290.38"},
+  "aging": {"current": "9200.38", "1-30": "140.00", "31-60": "0.00", "61-90": "3500.00", ">90": "3450.00", "total": "16290.38"},
   "eligible_receivables": "12840.38",
   "financing_estimate_at_70pct": "8988.27",
   "sales_concentration": {
