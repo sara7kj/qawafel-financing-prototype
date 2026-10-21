@@ -2,7 +2,9 @@
 
 Qawafel Graduate Software Engineer assessment. This repository holds the **Task 03 prototype** and the written answers for Tasks 01, 02, 04 and 05 (see [Documents](#documents)).
 
-> **All bundled sample and test data is synthetic.** No real company or customer data is used. There is no public deployment; the app runs locally.
+> **Live demo:** https://sara-sme-financing.streamlit.app — no sign-in, no API key and no payment needed.
+> It can also be run locally (below).
+> **All bundled sample and test data is synthetic.** No real company or customer data is used.
 
 ---
 
@@ -49,12 +51,20 @@ To regenerate the sample data (optional; the files are already in `data/sample/`
 .venv\Scripts\python.exe scripts/generate_invoices.py
 ```
 
-### Streamlit Community Cloud (prepared, not deployed)
-The repository is set up for Streamlit Community Cloud, but **no public deployment exists yet**. When deploying:
+### Streamlit Community Cloud (deployed)
+The app is deployed at **https://sara-sme-financing.streamlit.app**.
+
+**Deployment settings:**
 - **Main file path:** `app/streamlit_app.py`.
-- **Python version:** choose **3.13** in the deployment's advanced settings. The project requires Python ≥ 3.13, and the dependencies are pinned for 3.13.
+- **Python version:** **3.13**, chosen in the deployment's advanced settings. The project requires Python ≥ 3.13, and the dependencies are pinned for 3.13.
 - **Dependencies:** the Cloud installs `requirements.txt` from the repository root, and that also installs `src/financing`.
-- **Secrets:** none needed. Do **not** add `requirements-ai.txt` or an API key; without them, the AI tab simply shows "unavailable".
+- **Secrets:** none. `requirements-ai.txt` and an API key are **not** installed on the demo, so the AI tab shows "unavailable". The optional AI summary has not been tested against the live service.
+
+**Checked manually by the author on the deployed demo** (not by the automated tests):
+- it opens in a private browser window without signing in;
+- the clean and defect samples show the expected figures;
+- the JSON and CSV downloads work. ChatGPT/Codex checked that the 53 exported CSV rows matched the issues list in the supplied JSON package;
+- uploading `sample_clean.xlsx` works and gives the expected illustrative financing of SAR 1,040,901.47 at 70%.
 
 ---
 
