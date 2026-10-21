@@ -41,7 +41,7 @@ Turn 12 months of invoice-level data into a **clear, checked, decision-support p
 6. Package submission to the partner bank's API, with status tracking.
 
 ### 2.2 Prototype scope (what we will build)
-- A single-user local web app (Streamlit) that loads **one synthetic Excel workbook in a documented format** with invoices, payments and credit notes.
+- A single-user Streamlit web app (run locally, and published as a public demo on Streamlit Community Cloud) that loads **one synthetic Excel workbook in a documented format** with invoices, payments and credit notes.
 - A fixed **reporting period (RP): 2025-10-01 to 2026-09-30, inclusive**, and a fixed **valuation date (VD): 2026-09-30**.
 - Validation with explicit handling of record defects, period limits and their effect on linked invoices (§3, §5).
 - **Sales are kept separate from collections.** Supports **partial payments** and **credit notes linked to invoices**.

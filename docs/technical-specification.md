@@ -322,7 +322,7 @@ stateDiagram-v2
 | Illustrative financing estimate | **[Built]** | A declared assumption, not a bank policy |
 | JSON package (includes the rule-based summary) and issues CSV | **[Built]** | One export contract |
 | AI summary | **[Built — offline-tested only]** | Optional add-on after the package. Needs the SDK and a key. **Not verified against the live service** |
-| Results screen (Streamlit) | **[Built]** | Local, single user, no login. It displays results only; it does not record reviews |
+| Results screen (Streamlit) | **[Built]** | Available locally and as a public Streamlit Community Cloud demo, without sign-in. Intended for synthetic data only. It displays results only; it does not record reviews |
 | Review recording, re-upload and version transitions | **[Designed]** | §3.3, §4.2 |
 | Synthetic data generator and fixtures | **[Built]** | Seeded; content-reproducible |
 | REST API | **[Designed]** | §3. The library functions already exist |

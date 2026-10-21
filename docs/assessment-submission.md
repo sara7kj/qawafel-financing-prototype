@@ -1,7 +1,11 @@
 # Qawafel Technical Assessment — Written Answers
 **Graduate Software Engineer · Tasks 01, 02, 04 and 05**
 
-> **Prototype (Task 03):** https://github.com/sara7kj/qawafel-financing-prototype. The `README.md` there explains how to run it, the sample data and the assumptions. There is no public deployment; the app runs locally. All bundled sample and test data is synthetic.
+> **Prototype (Task 03):**
+> - **Live demo:** https://sara-sme-financing.streamlit.app — no sign-in, API key or payment needed.
+> - **Repository:** https://github.com/sara7kj/qawafel-financing-prototype. The `README.md` there explains how to run it locally, the sample data and the assumptions.
+>
+> All bundled sample and test data is synthetic. The optional AI summary is not enabled on the demo and has not been tested against a live AI service.
 
 An SME wholesaler provides 12 months of invoices (Excel) and bank statements (PDF), and Qawafel prepares a package for a partner bank to review. My approach makes the package **trustworthy before it is fast**:
 - validate every record and explain every exclusion;
