@@ -26,6 +26,7 @@ from financing.metrics import (
     compute_metrics,
     format_sar,
 )
+from financing.rule_summary import build_rule_summary
 from financing.validation import validate
 from financing.schema import (
     REPORTING_PERIOD_END,
@@ -215,12 +216,14 @@ def build_package(validation: ValidationResult, metrics: MetricsResult, estimate
             "label": estimate.label,
         },
         "warnings": [r for r in issue_rows(validation, metrics) if r["class"] == "WARN"],
+        "ai_summary": {"value": None, "reason": "not requested"},  # replaced by ai_summary.with_ai_summary
         "assumptions": ASSUMPTIONS,
         "disclaimers": [SYNTHETIC_DISCLAIMER if known_synthetic_sample else UNVERIFIED_ORIGIN_DISCLAIMER,
                         *DISCLAIMERS],
     }
     if metrics.blocked:
         package["indicators_reason"] = "analysis is blocked; no indicators are produced"
+        package["automated_summary"] = build_rule_summary(package)
         return package
 
     receivables = metrics.receivables
@@ -246,6 +249,7 @@ def build_package(validation: ValidationResult, metrics: MetricsResult, estimate
         "sales_concentration": _concentration(metrics.sales_concentration),
         "receivables_concentration": _concentration(metrics.receivables_concentration),
     }
+    package["automated_summary"] = build_rule_summary(package)  # rule-based default summary, from the above
     return package
 
 

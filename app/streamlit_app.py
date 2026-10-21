@@ -15,6 +15,16 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from financing.ai_summary import (
+    AI_LABEL,
+    configured_model,
+    data_limits,
+    eligibility,
+    fingerprint,
+    generate_summary,
+    sdk_available,
+    with_ai_summary,
+)
 from financing.financing import DEFAULT_RATE_PERCENT, estimate_financing
 from financing.metrics import BUCKETS, display_ratio
 from financing.package import analyse, build_package, issue_rows, issues_csv, package_json
@@ -85,8 +95,13 @@ with st.sidebar:
 
 validation, metrics = run_analysis(data, source_name)
 estimate = estimate_financing(metrics, rate)
-package = build_package(validation, metrics, estimate, applicant_id=applicant_id, source_name=source_name,
-                        known_synthetic_sample=known_sample)
+base_package = build_package(validation, metrics, estimate, applicant_id=applicant_id, source_name=source_name,
+                             known_synthetic_sample=known_sample)
+ai_model = configured_model()
+ai_fingerprint = fingerprint(base_package, ai_model)  # computed before ai_summary is attached
+ai_store = st.session_state.setdefault("ai_summaries", {})  # per user session, keyed by fingerprint
+ai_current = ai_store.get(ai_fingerprint)
+package = with_ai_summary(base_package, ai_current, ai_model)
 rows = issue_rows(validation, metrics)
 
 st.title("SME financing review")
@@ -123,12 +138,30 @@ def issues_table() -> None:
                  column_config={"row": st.column_config.NumberColumn("Excel row", format="%d")})
 
 
+def show_rule_summary(summary: dict) -> None:
+    """The default summary: built by fixed rules from the computed results (not AI)."""
+    st.subheader(summary["title"])
+    st.caption(summary["note"])
+    st.markdown(f"**{summary['headline']}**")
+    if summary["key_figures"]:
+        st.dataframe(pd.DataFrame([{"Figure": f["label"], "Value": f["value"],
+                                    "Note / reason": f["reason"] or f["note"] or ""}
+                                   for f in summary["key_figures"]]), hide_index=True, width="stretch")
+    for title, key in (("Warnings", "warnings"), ("Data limits", "data_limits"),
+                       ("Follow-up questions", "follow_up_questions")):
+        if summary[key]:
+            st.markdown(f"**{title}**")
+            for line in summary[key]:
+                st.markdown(f"- {line}")
+
+
 # ---------------------------------------------------------------- BLOCK
 
 if metrics.blocked:
     st.error("**Analysis blocked.** No financial indicators are produced until these problems are fixed:")
     for reason in metrics.block_reasons:
         st.markdown(f"- {reason}")
+    show_rule_summary(package["automated_summary"])
     st.subheader("Issues")
     issues_table()
     downloads("blocked")
@@ -161,8 +194,12 @@ with st.container(border=True):
     if estimate.amount_halalas is None:
         f2.error(f"N/A: {estimate.reason}")
 
-tab_quality, tab_sales, tab_aging, tab_conc, tab_export = st.tabs(
-    ["Data quality", "Sales & collections", "Receivables aging", "Customer concentration", "Export"])
+tab_summary, tab_quality, tab_sales, tab_aging, tab_conc, tab_ai, tab_export = st.tabs(
+    ["Automated summary", "Data quality", "Sales & collections", "Receivables aging", "Customer concentration",
+     "AI summary (optional — requires API key)", "Export"])
+
+with tab_summary:
+    show_rule_summary(package["automated_summary"])
 
 
 # ---------------------------------------------------------------- data quality
@@ -302,6 +339,43 @@ with tab_conc:
         concentration(metrics.sales_concentration, "Top 5 by net sales (excl. VAT)")
     with right:
         concentration(metrics.receivables_concentration, "Top 5 by open receivables (incl. VAT)")
+
+
+# ---------------------------------------------------------------- AI analyst summary (optional)
+
+with tab_ai:
+    st.caption(f"Optional — requires the AI SDK and an API key. Model: `{ai_model}` · {AI_LABEL} "
+               "The AI connection has been tested offline only (not verified against the live service). "
+               "The default summary is the rule-based one in the first tab; nothing else depends on this tab.")
+    blocked_reason = eligibility(base_package)
+    if blocked_reason:
+        st.info(f"AI summary unavailable: {blocked_reason}.")
+    elif not sdk_available():
+        st.info("AI summary unavailable: the optional AI SDK is not installed "
+                "(`pip install -r requirements-ai.txt`).")
+    else:
+        if st.button("Generate analyst summary", type="primary"):
+            with st.spinner("Asking the AI service and checking the result..."):
+                ai_store[ai_fingerprint] = generate_summary(base_package, ai_model)
+            st.rerun()  # rebuild the export with the new summary
+        if ai_current is None:
+            st.caption("No summary for the current inputs. Changing the sample or the rate needs a new one.")
+        elif not ai_current.available:
+            st.warning(f"AI summary unavailable: {ai_current.reason}.")
+        else:
+            st.markdown(f"#### {ai_current.headline}")
+            for kind, title in (("strength", "Strengths"), ("risk", "Risks"),
+                                ("data_quality", "Data quality"), ("question", "Questions to ask")):
+                points = [p for p in ai_current.points if p.kind == kind]
+                if points:
+                    st.markdown(f"**{title}**")
+                    for p in points:
+                        st.markdown(f"- {p.text}")
+            st.caption(f"{AI_LABEL} Model: {ai_current.model} · generated {ai_current.generated_at} UTC.")
+    st.markdown("**Data limits** (built from the computed results, not by the AI)")
+    if not metrics.blocked:
+        for line in data_limits(base_package):
+            st.markdown(f"- {line}")
 
 
 # ---------------------------------------------------------------- export
