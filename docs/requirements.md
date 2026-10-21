@@ -58,11 +58,24 @@ Turn 12 months of invoice-level data into a **clear, checked, decision-support p
 - Authentication, multi-tenant storage, submission to a bank API and production hosting.
 - Multi-currency conversion.
 
-### 2.4 AI analyst summary (planned feature, not implemented)
-- The summary is in scope as a **planned** feature. It is not implemented yet.
-- It will use **only computed indicators and flags**. It will not read raw records.
+### 2.3a Automated analyst summary — rule-based (default)
+- This is the default summary: **"Automated analyst summary — rule-based"**. It is not AI and needs no SDK, key or network, so a reviewer can try the whole project for free.
+- **Built by fixed rules** from the exported package. It contains:
+  - key figures with their basis;
+  - warnings (R-20, receivables quality, receivable-unreliable invoices including R-13, quarantine, D-13, R-17, R-18, R-19);
+  - the code-built data limits;
+  - follow-up questions triggered by those warnings.
+- **No new financial calculations and no approval or rejection.**
+- **BLOCK:** the summary shows the block reasons and no figures.
+- **N/A:** an N/A value stays N/A with its reason, and a true zero is shown as zero.
+- **Where it appears:** in the UI's first tab, on the BLOCK screen, and as `automated_summary` in the JSON package.
+- **Code:** `src/financing/rule_summary.py`. **Tests:** `tests/test_rule_summary.py`.
+
+### 2.4 AI analyst summary (optional — requires API key; offline-tested, not live-verified)
+- It uses **only computed indicators and flags**, through a fact sheet. It never reads raw records.
 - The core app works fully without it.
-- Choosing the model and how it runs is deferred to the feature's design.
+- In this phase it is limited to the bundled synthetic samples. The model is `claude-sonnet-5-5`, which is configurable.
+- Design, checks and limits: `docs/ai-summary.md`.
 
 ---
 
@@ -349,8 +362,9 @@ Applies to the customers (C), invoices (I), payments (P) and credit notes (N) sh
 | D-06 | Aging buckets are Current, 1–30, 31–60, 61–90 and > 90 days overdue. |
 | D-08 | A WARN is raised when one customer's share exceeds 30%. This is an experimental threshold, not a bank policy. |
 | D-09 | Financing estimate = advance rate × reliable receivables (receivables scope, §3.4) that are ≤ 90 days overdue. The default rate is 70%, adjustable from 0% to 100%. This is an illustrative assumption only. |
-| D-10 | The AI summary is a planned feature that uses computed indicators and flags only. It is not implemented, and the model and runtime are deferred to its design. |
+| D-10 | The AI summary uses computed indicators and flags only. It is implemented and tested offline, not yet live-verified. Details: model `claude-sonnet-5-5` (configurable); no server-side fallback; 30 s timeout per attempt; at most 2 retries for transient errors; bundled synthetic samples only; summary stored per session and keyed by an input fingerprint. See `docs/ai-summary.md`. |
 | D-11 | The package is exported as JSON. Unavailable values are `null` with a reason. |
+| D-14 | The default summary is rule-based ("Automated analyst summary — rule-based", §2.3a). The AI summary is a separate optional feature that requires an API key. The AI connection has not been tested live. |
 | D-13 | Valid payments on quarantined invoices are excluded from collections. The indicator is labelled "Collections from accepted records only" and shows the count and known amount of excluded payments. These exclusions alone never make a month N/A. |
 | D-02 | Workbook schema: as defined in `docs/data-design.md` §1–§2 (v0.2). |
 | D-12 | Synthetic data profile and defect datasets: as defined in `docs/data-design.md` §3–§5 (v0.2), with seed 20260930. |

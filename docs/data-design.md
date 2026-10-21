@@ -161,7 +161,14 @@ customers 1 ──< invoices 1 ──< payments
 
 **Concentration targets (clean sample)**
 - The top customer should hold about 15–22% of net sales, and the top 5 about 50–66%.
-- No customer should exceed 30%, so the clean sample raises no R-20 warning. R-20 is tested in a separate case (§5.2).
+- No customer should exceed 30% of **net sales**, so the clean sample raises no **sales** R-20 warning.
+- **Low sales concentration does not guarantee low receivables concentration.** Open balances depend on payment terms and behaviour: a customer on long terms who pays in instalments holds a larger share of what is still owed than of what was sold. A clean sample may therefore carry **business-risk warnings**. A WARN is not a data defect.
+- **Actual result (seed 20260930, verified):**
+  - `CUST-003` (key account, 90-day terms, partial payer) holds SAR 509,895.65 of the SAR 1,577,900.74 reliable open balance at VD.
+  - Its exact share is 50,989,565 / 157,790,074 = 0.32315, which is above 30% before any rounding, so R-20 is raised for its receivables.
+  - The same customer holds 18.49% of net sales.
+  - The 30% threshold stays as approved (experimental, D-08); it was not changed to fit this result.
+- R-20 boundaries are tested in separate cases (§5.2, TC-16).
 
 **Seasonal factors (declared assumption)**
 | Month | Factor | Reason assumed |
