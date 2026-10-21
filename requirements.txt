@@ -1,6 +1,8 @@
 # Full pinned environment (Python 3.13.14, Windows).
 # Direct dependencies: pandas, openpyxl, streamlit, plotly, pytest
 # Rebuild: .venv\Scripts\python.exe -m pip install -r requirements.txt
+# The last line also installs this project's own package (src/financing) in editable mode,
+# so the app can `import financing` locally and on Streamlit Community Cloud without sys.path changes.
 altair==6.3.0
 anyio==4.15.1
 attrs==26.1.0
@@ -44,3 +46,5 @@ urllib3==2.8.0
 uvicorn==0.54.0
 watchdog==6.0.0
 websockets==17.2
+# This project (src/financing), installed from the repository root
+-e .

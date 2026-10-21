@@ -38,18 +38,23 @@ py -3.13 -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 ```bash
-.venv\Scripts\python.exe -m pip install -e .
-```
-```bash
 .venv\Scripts\python.exe -m streamlit run app/streamlit_app.py
 ```
 
-Then open http://localhost:8501. **No API key, no AI SDK and no payment are needed.**
+- `requirements.txt` installs the pinned dependencies **and** this project's own package (`src/financing`, the `-e .` line), so no separate install step is needed. The app imports `financing` as an installed package; it does not change `sys.path`.
+- Then open http://localhost:8501. **No API key, no AI SDK and no payment are needed.**
 
 To regenerate the sample data (optional; the files are already in `data/sample/`):
 ```bash
 .venv\Scripts\python.exe scripts/generate_invoices.py
 ```
+
+### Streamlit Community Cloud (prepared, not deployed)
+The repository is set up for Streamlit Community Cloud, but **no public deployment exists yet**. When deploying:
+- **Main file path:** `app/streamlit_app.py`.
+- **Python version:** choose **3.13** in the deployment's advanced settings. The project requires Python ≥ 3.13, and the dependencies are pinned for 3.13.
+- **Dependencies:** the Cloud installs `requirements.txt` from the repository root, and that also installs `src/financing`.
+- **Secrets:** none needed. Do **not** add `requirements-ai.txt` or an API key; without them, the AI tab simply shows "unavailable".
 
 ---
 
